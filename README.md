@@ -55,9 +55,11 @@
 
 ----
 
-# [Fit] Diagram Here
+![Fit](IoT Architecture Diagram.png)
 
+^ So let's talk about the pieces that will be necessary to create the Connected Iron Throne. Here's an architecture diagram for the whole system. Don't worry if you don't understand any of these. We'll discuss them, and then come back to this diagram in a moment. For the time being, note that we have a variety of sensors and actuators that all connect to a microcontroller. That controller, in turn, talks to a cloud service, which a variety of clients can then connect to.
 
+^ Note that this is not the only architecture possible; one can dispense with the Cloud Service component and have clients talk directly to the microcontrollers. The disadvantage, however, is that it becomes considerably harder to interact with your IoT devices if you're not close by or on the same network, so structuring things in this way generally provides the most benefit and flexibility.
 
 ----
 
@@ -136,7 +138,7 @@
 
 ![](700px-Newbundle1.jpg)
 
-##[Fit]Grove
+##[Inline]Grove
 
 ^ You may also bump into the Grove ecosystem as you work with IoT projects. Grove is essentially a combination of a base shield that can work with a variety of microcontrollers and modularized components, bringing a good deal of plug-and-play ease to prototyping projects. There are Grove interface boards for each of the platforms listed above, and the modular sensors and actuators will work with any of the platforms.
 
@@ -163,6 +165,9 @@
 # [Fit]AWS
 
 AWS IoT: https://aws.amazon.com/iot/
+
+^ Has common functionality, plus "shadow" devices that allow you to write updates to devices that will be applied when they next connect. Rules engine provides some capabilities for querying data SQL-style, and acting automatically on it. Can drive DB export, alerts, etc. Works nicely with other tools in Amazon's cloud suite. Has SDKs for C, Node, Arduino, and Mobile. Can put permission restrictions on particular devices. Fair bit of work to get things up and running.
+
  - Many other good backend services (Lambda, e.g.) that could be used for IoT, but which aren't tailored for it.
  
 ---- 
@@ -180,13 +185,15 @@ AWS IoT: https://aws.amazon.com/iot/
 
 # [Fit]Let's Build It!
 
-^ So now we know what pieces we need. Let's start to put this thing together! For our stack, we'll be using standard sensors and actuators. For the microcontroller, we'll use the Photon. Its built-in wifi and reasonable price make it an attractive option for us. (Plus, I wanted an excuse to buy one.) We can use 
+^ So now we know what pieces we need. Let's start to put this thing together! For our stack, we'll be using standard sensors and actuators. For the microcontroller, we'll use the Photon. Its built-in wifi and reasonable price make it an attractive option for us. (Plus, I wanted an excuse to buy one.) Because it is tightly integrated with the Photon and has a really nicely thought-out REST API, we'll use Particle.io for our backend. And finally, we'll write a small custom client for iOS and see how that works. With all of that in mind, let's take a closer look at each of the layers in our system and see what we need to make it work.
 
 
 ----
 
 ![Inline](sensorforceresistor.jpg)
 #[Fit]Pressure Sensor
+
+^ So here's a common type of pressure sensor. It's analog -- not only does it report that there's someone sitting on the throne, but it also gives you an idea of how much that person weighs. Electrically, it's essentially a variable resistor: if nobody's sitting on it, its resistance is 20MOhms -- very high. The more pressure is applied to it, the less resistance it provides. For this application, all we care about is whether there's somebody sitting on it, so we'll simply see if the resistance goes below a threshold value.
 
 ----
 
@@ -196,13 +203,19 @@ int Senpin=A0;
 
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin( 9600 );
 }
 
 void loop()
 {
-    Senval=analogRead(Senpin);
-    Serial.println(Senval);
-    delay(200);
+    Senval = analogRead( Senpin );
+    Serial.println( Senval );
+    delay( 200 );
 }
 ```
+
+^ There are a lot of interesting things to learn here in your first microcontroller code! First off, you'll notice that this looks a lot like C. That's because it is. Most microcontrollers use a similar subset of C with the same set of library functions to support interacting with inputs and outputs. (Of course, there are also hardware-specific additions for unique features; we'll see some of those later.)
+
+^ You'll also note that there are two methods defined: `setup()` and `loop()`. These are also common features of controller code. The setup method gets called once when the system powers up or is reset. It's the place to do any setup and initialization.
+
+^ 
