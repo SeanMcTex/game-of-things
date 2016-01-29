@@ -59,8 +59,6 @@
 
 ^ So let's talk about the pieces that will be necessary to create the Connected Iron Throne. Here's an architecture diagram for the whole system. Don't worry if you don't understand any of these. We'll discuss them, and then come back to this diagram in a moment. For the time being, note that we have a variety of sensors and actuators that all connect to a microcontroller. That controller, in turn, talks to a cloud service, which a variety of clients can then connect to.
 
-^ Note that this is not the only architecture possible; one can dispense with the Cloud Service component and have clients talk directly to the microcontrollers. The disadvantage, however, is that it becomes considerably harder to interact with your IoT devices if you're not close by or on the same network, so structuring things in this way generally provides the most benefit and flexibility.
-
 ----
 
 
@@ -183,10 +181,25 @@ AWS IoT: https://aws.amazon.com/iot/
 
 ----
 
+![Fit](IoT architecture Diagram.png)
+
+^ So, here's the architecture diagram again. Note that this is not the only architecture possible; one can dispense with the Cloud Service component and have clients talk directly to the microcontrollers. The disadvantage, however, is that it becomes considerably harder to interact with your IoT devices if you're not close by or on the same network, so structuring things in this way generally provides the most benefit and flexibility.
+
+
+^ Any questions about how these pieces fit together?
+
+----
+
 # [Fit]Let's Build It!
 
 ^ So now we know what pieces we need. Let's start to put this thing together! For our stack, we'll be using standard sensors and actuators. For the microcontroller, we'll use the Photon. Its built-in wifi and reasonable price make it an attractive option for us. (Plus, I wanted an excuse to buy one.) Because it is tightly integrated with the Photon and has a really nicely thought-out REST API, we'll use Particle.io for our backend. And finally, we'll write a small custom client for iOS and see how that works. With all of that in mind, let's take a closer look at each of the layers in our system and see what we need to make it work.
 
+----
+# Vocabulary
+
+* **Pin**: one of the connectors on the edge of the microcontrollers to which wires can be attached.
+* **High/Low**: Indicate whether a pin has current run through it or not.
+* **Digital/Analog**: Whether microcontroller inputs/outputs are treated as on/off, or as continuously variable values.
 
 ----
 
@@ -198,24 +211,100 @@ AWS IoT: https://aws.amazon.com/iot/
 ----
 
 ```c
-int Senval=0;
-int Senpin=A0;
+int pressureSensorPin = A0;
+int pressureReading;
+int pressureThreshold = 100;
+bool wasThroneOccupied = false;
 
 void setup()
 {
-    Serial.begin( 9600 );
-}
-
-void loop()
-{
-    Senval = analogRead( Senpin );
-    Serial.println( Senval );
-    delay( 200 );
+    pinMode( pressureSensorPin, INPUT );
+    Particle.variable("pressure", pressureReading);
 }
 ```
 
-^ There are a lot of interesting things to learn here in your first microcontroller code! First off, you'll notice that this looks a lot like C. That's because it is. Most microcontrollers use a similar subset of C with the same set of library functions to support interacting with inputs and outputs. (Of course, there are also hardware-specific additions for unique features; we'll see some of those later.)
+^ So let's look at some code. You may not understand all of the details here, but I hope it will at least give you a sense of what writing code for these things is like. Most of the time, your business logic is going to live elsewhere in the architecture, so most of what you'll see here is focused on dealing with the inputs and outputs and making that data available for other parts of your system to use. But still, there are lots of interesting things to learn here in your first microcontroller code! First off, you'll notice that this looks a lot like C. That's because it more-or-less is. Most microcontrollers use a similar subset of C with the same set of library functions to support interacting with inputs and outputs. But there are also hardware-specific additions for unique features which we'll see along the way.
 
-^ You'll also note that there are two methods defined: `setup()` and `loop()`. These are also common features of controller code. The setup method gets called once when the system powers up or is reset. It's the place to do any setup and initialization.
+^ In this sort of code, you'll nearly always see two special methods: `setup()` and `loop()`. The setup method gets called once when the system powers up or is reset. It is, as you'd expect, the place to do any setup and initialization. We do two things in the setup here. First we configure one of the pins on the controller board to get input from our pressure sensor. The second is specific to the Particle platform. It takes a variable in your code and exposes it to the REST API. The library is clever enough to look at the type of the variable you give it and to make the REST endpoint respond appropriately.
 
-^ 
+----
+
+```c
+void loop()
+{
+   pressureReading = analogRead( pressureSensorPin );
+   
+   bool isThroneOccupied = pressureReading > pressureThreshold;
+   if ( isThroneOccupied && !wasThroneOccupied ) {
+       Particle.publish( "throneStatus", "occupied" );
+   }
+   if ( !isThroneOccupied && wasThroneOccupied ) {
+       Particle.publish( "throneStatus", "vacant" );
+   }
+   wasThroneOccupied = isThroneOccupied;
+}
+
+```
+
+^ The loop function is essentially your runtime loop. It gets called over and over until your controller gets reset. In our case, all we need to do is to read the value from the pressure sensor pin and assign it to our variable. Since we've already linked that variable to the REST endpoint in our setup, we can now query the value of our pressure sensor through the REST API.
+
+
+
+----
+
+![Inline](vibration-motor.jpg)
+
+#[Fit]Assassination Notifications
+
+^ This is a vibration motor. We'll attach one of these to the bottom of the throne so that we can make it vibrate when notifications are sent. Some vibration motors can be driven by connecting them directly to a microcontroller. Bigger ones might require a transistor or relay and a seperate power source. We're choosing one that can be connected directly to the controller.
+
+----
+
+
+^ So first, let's take a look at our setup code for the motor. We first assign a variable with the particular pin on the board we'll be using to drive the motor: 7, in this case. Then, as part of our setup method, we set the mode for that pin to OUTPUT. This will allow us to switch on and off a signal to that pin under software control, which will activate or deactivate the motor. We then use the digitalWrite function to just be sure that the motor is turned off. (Setting it to LOW simply means that there won't be current being sent to that pin.)
+
+^ The last bit of setup is something that's specific to the Particle API: registering a function. To do so, we simply tell it what the public name that's exposed to the REST service will be, and then reference a function in our code that will be called when a client accesses that REST endpoint. A few things to bear in mind when setting up functions: their public name is limited to 12 characters, and you can only have four functions per device, due to memory constraints. These are both constraints of the platform, not universal microcontroller limitations.
+
+```c
+int vibrationMotorPin = D7;
+
+void setup()
+{
+   pinMode( vibrationMotorPin, OUTPUT );
+   digitalWrite( vibrationMotorPin, LOW );
+   
+   Particle.function( "notify", notify );
+}
+```
+
+----
+
+^ Now here's the function that gets called when the client accesses the REST endpoint. You'll notice that this function, like all functions in the Particle ecosystem, takes a string as input, and returns an integer. That may seem a bit restrictive, but don't worry too much about it -- if you need to get other data types out of your particle, you can expose those data as variables. 
+
+^ In order to provide some flexbility for different types of notifications (and to make our code a little more interesting), we'll check the parameter and see if we're getting a notification of an assassination. This will allow us to support other types of notifications in the future if we wish.
+
+```c
+int notify( String notification ) {
+    if ( notification == "assassination" ) {
+        notifyAssassination();
+        return 0;
+    }
+    
+    return -1;
+}
+```
+----
+^ Finally, here's the code that actually makes the motor vibrate. As you can tell, we're setting it up to do four half-second pulses by turning the pin on for 500ms, then off for 500ms.
+
+```c
+void notifyAssassination() {
+    for ( int i = 0; i < 4; i++ ) {
+        digitalWrite( vibrationMotorPin, HIGH );
+        delay( 500 );
+        digitalWrite( vibrationMotorPin, LOW );
+        delay( 500 );
+    }
+}
+
+```
+
