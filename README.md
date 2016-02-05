@@ -66,9 +66,33 @@
 
 # [Fit] Sensors & Actuators
 
-^ We have to be able to detect when the throne is occupied, so we'll install a pressure sensor under the seat of the throne. We also need a vibration motor, which we'll attach to the throne's frame as well. And finally, the Hindquarter Identification System has a serial connection that transmits a HUID (Hindquarter Unique Identifier) whenever someone assumes the throne.
+^ Your IoT device isn't much good without a way to interact with the world. In the same way that our brains interact with the world by means of inputs and outputs, your IoT device uses sensors to find out what's going on around it, and actuators to make something happen.
 
-^ Fancy word: an actuator is simply a motor that moves things or causes an action to take place under electronic control. Sensors and actuators are, therefore, essentially the input and output for your IoT device.
+^ Fancy word: an actuator is simply a motor that moves things or causes an action to take place under electronic control. 
+
+----
+
+![Inline](sensorforceresistor.jpg)
+#[Fit]Pressure Sensor
+
+^ We have to be able to detect when the throne is occupied, so we'll install a pressure sensor under the seat of the throne. It looks like this.
+
+
+----
+
+![Inline](vibration-motor.jpg)
+
+#[Fit] Vibration Motor
+
+^ We also need a vibration motor, which we'll attach to the throne's frame as well. 
+
+----
+
+# [Fit] Hindquarter ID System
+
+^ And finally, the Hindquarter Identification System has a serial connection that transmits a HUID (Hindquarter Unique Identifier) whenever someone assumes the throne. I don't have a photo of this, because I made it up.
+
+
 
 ----
 
@@ -79,29 +103,11 @@
 
 ^ A microcontroller is simply a fancy word for a tiny computer. Since they're designed to interact with sensors and actuators, most of them have a bunch of input and output pins. To create an IoT device, you need some way to connect to other things. Therefore, a wireless connection of some sort is essential. Bluetooth has the advantage that it's low power, but Wifi allows your device to connect to the Internet directly without having to have a bluetooth host nearby to act as a bridge. We'll look at options for both of these.
 
-----
-
-![Fit](91OkqM3KPlL2.jpg)
-
-# [Fit] A Backend Service
-
-^ For your device to be truly useful, it will very likely need some kind of backend service. This allows your device to send information somewhere. The backend receives that data, typically via a web service call. It can respond to it by logging it, making it available via a web service, sending push notifications, and creating reporting charts and graphs. The backend is essentially the communication hub for your Connected Throne service.
-
-----
-
-![Fit](91OkqM3KPlL2.jpg)
-
-# [Fit] The Client
-
-^ The client is typically a mobile or desktop computer that interacts with the backend service. In our use case, we have two kinds of clients: that of the King, who gets alerts when he hasn't brutally killed someone recently, and that of the court, which get alerted when someone new ascends to the throne, and can warn the king when an assassination attempt in immanent. Thus, our whole system together looks like this:
-
-----
-
-# [Fit] Microcontrollers
-
 ^ There are many available. We'll be covering some of the most popular options here, but there are dozens of other boards available that could be used. But I would personally recommend sticking with one of the more popular options, as you'll be able to find much more information out on the Internet to support your efforts.
 
 ----
+
+
 
 ![](arduino_family.jpg)
 
@@ -134,19 +140,26 @@
 
 ----
 
-![](700px-Newbundle1.jpg)
+![Inline](700px-Newbundle1.jpg)
 
-##[Inline]Grove
+## [Fit] Grove System
 
 ^ You may also bump into the Grove ecosystem as you work with IoT projects. Grove is essentially a combination of a base shield that can work with a variety of microcontrollers and modularized components, bringing a good deal of plug-and-play ease to prototyping projects. There are Grove interface boards for each of the platforms listed above, and the modular sensors and actuators will work with any of the platforms.
 
 ----
 
-# Backend Services
+![Fit](91OkqM3KPlL2.jpg)
 
- - Particle.io
- - IBM IoT Foundation
- 
+# [Fit] A Backend Service
+
+^ For your device to be truly useful, it will very likely need some kind of backend service. This allows your device to send information somewhere. The backend receives that data, typically via a web service call. It can respond to it by logging it, making it available via a web service, sending push notifications, and creating reporting charts and graphs. The backend is essentially the communication hub for your Connected Throne service.
+
+----
+
+![Fit](particle-logo.png)
+
+^ Particle is a system designed to work with the Photon and Electron microcontrollers. Other microcontrollers, such as Digistump's Oak, have recently begun relying on Particle as well. Particle has a nice, clean REST API, and relies on web standards for communication, event notification, and authentication.
+
 ----
  
 ![Fit](microsoft-azure-logo.jpg)
@@ -160,13 +173,16 @@
 ^ IBM's offering is similar to Microsoft's: enterprise grade services with an emphasis on large-scale management. IBM has an excellent presence here locally, and actively supports the iOS community, so they're definitely one I would look at if I were targeting a large-scale implementation.
 
 ----
-# [Fit]AWS
+![Inline](aws-logo.png)
 
-AWS IoT: https://aws.amazon.com/iot/
+# [Fit]Amazon Web Services IOT
 
 ^ Has common functionality, plus "shadow" devices that allow you to write updates to devices that will be applied when they next connect. Rules engine provides some capabilities for querying data SQL-style, and acting automatically on it. Can drive DB export, alerts, etc. Works nicely with other tools in Amazon's cloud suite. Has SDKs for C, Node, Arduino, and Mobile. Can put permission restrictions on particular devices. Fair bit of work to get things up and running.
 
- - Many other good backend services (Lambda, e.g.) that could be used for IoT, but which aren't tailored for it.
+----
+![](sir-not-appearing.png)
+
+^ There are many other good backend services (Lambda, e.g.) that could be used for IoT, but which aren't tailored for it.
  
 ---- 
 
@@ -175,7 +191,12 @@ AWS IoT: https://aws.amazon.com/iot/
 ^ Another service you'll want to be aware of as you're developing your solution is IFTTT, short for "IF this THEN that". It's a terrific service that allows mere mortals to set up conditional logic, and which has integrations to a huge variety of services. If you want to trigger a Hue light to turn red and text the paramedics your GPS location when you log a 180/110 blood pressure on your Withings blood pressure cuff, IFTTT is the glue that makes this easy to do.
 
 ----
-# Client
+
+![Fit](91OkqM3KPlL2.jpg)
+
+# [Fit] The Client
+
+^ The client is typically a mobile or desktop computer that interacts with the backend service. In our use case, we have two kinds of clients: that of the King, who gets alerts when he hasn't brutally killed someone recently, and that of the court, which get alerted when someone new ascends to the throne, and can warn the king when an assassination attempt in immanent. 
 
 ^ So, let's talk about the client. In our case, since this is CocoaConf, we'll be considering how to write client for iOS. Our approach will vary depending on the comnmunication technology we're using. For BLE connections, CoreBluetooth will allow us to talk to the device directly. If we're connected over Wifi, we'll likely use REST calls, either to the device directly, or to the backend service. In addition, many services provide an SDK to make talking to their systems even easier.
 
@@ -254,7 +275,7 @@ void loop()
 
 ![Inline](vibration-motor.jpg)
 
-#[Fit]Assassination Notifications
+#[Fit] Vibration Motor
 
 ^ This is a vibration motor. We'll attach one of these to the bottom of the throne so that we can make it vibrate when notifications are sent. Some vibration motors can be driven by connecting them directly to a microcontroller. Bigger ones might require a transistor or relay and a seperate power source. We're choosing one that can be connected directly to the controller.
 
