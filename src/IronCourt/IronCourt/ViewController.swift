@@ -8,18 +8,30 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, ParticleManagerDelegate {
+    
+    var particleManager : ParticleManager!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        self.particleManager = ParticleManager( delegate: self )
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func didReceiveSendAlertTap(sender: AnyObject) {
+        self.particleManager.sendAssassinationAlert()
+    }
+    
+    func didReceiveAssassinationAlert() {
+        //
+        
+    }
 
 }
 

@@ -16,7 +16,20 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIX-Vg-42x">
+                                <rect key="frame" x="215" y="550" width="170" height="30"/>
+                                <state key="normal" title="Send Assassination Alert"/>
+                                <connections>
+                                    <action selector="didReceiveSendAlertTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fU5-Ob-rMu"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="dIX-Vg-42x" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="02q-xD-U9t"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="dIX-Vg-42x" secondAttribute="bottom" constant="20" id="ZqI-wD-1CX"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
