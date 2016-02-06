@@ -15,6 +15,7 @@ protocol ParticleManagerDelegate {
 
 class ParticleManager {
     var ironThronePhoton : SparkDevice?
+    var subscriberId : AnyObject?
     let delegate : ParticleManagerDelegate
     
     init( delegate: ParticleManagerDelegate ) {
@@ -47,8 +48,13 @@ class ParticleManager {
             
             for device in devices where device.name == "iron-throne" {
                 self.ironThronePhoton = device
+                self.subscribeToEvents()
             }
         }
+    }
+    
+    private func subscribeToEvents() {
+        self.subscriberId = SparkCloud.sharedInstance().subscribeToMyDevicesEventsWithPrefix("throneStatus", handler: eventHandler )
     }
     
     final func sendAssassinationAlert() {
@@ -67,5 +73,12 @@ class ParticleManager {
         return ( "", "" )
     }
 
+    private func eventHandler( event: SparkEvent!, error: NSError! ) {
+        print("Got event: " + event.data + "; " + event.event)
+    }
+    
+    deinit {
+        SparkCloud.sharedInstance().unsubscribeFromEventWithID( self.subscriberId )
+    }
 
 }
