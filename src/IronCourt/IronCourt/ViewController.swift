@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController, ParticleManagerDelegate {
     
     var particleManager : ParticleManager!
+    @IBOutlet var statusLabel: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,11 +28,5 @@ class ViewController: UIViewController, ParticleManagerDelegate {
     @IBAction func didReceiveSendAlertTap(sender: AnyObject) {
         self.particleManager.sendAssassinationAlert()
     }
-    
-    func didReceiveAssassinationAlert() {
-        //
-        
-    }
-
 }
 

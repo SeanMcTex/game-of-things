@@ -11,6 +11,17 @@ import Spark_SDK
 
 protocol ParticleManagerDelegate {
     func didReceiveAssassinationAlert()
+    func didRecieveOccupantUpdate()
+}
+
+extension ParticleManagerDelegate {
+    func didReceiveAssassinationAlert() {
+        // delegates can implement this if they wish to take action
+    }
+    
+    func didRecieveOccupantUpdate() {
+        // delegates can implement this if they wish to take action
+    }
 }
 
 class ParticleManager {

@@ -24,13 +24,25 @@
                                     <action selector="didReceiveSendAlertTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fU5-Ob-rMu"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status Update" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oIJ-dt-BbW">
+                                <rect key="frame" x="20" y="284" width="560" height="33"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <color key="textColor" red="1" green="0.14244898759999999" blue="0.067837994139999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="dIX-Vg-42x" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="02q-xD-U9t"/>
+                            <constraint firstItem="oIJ-dt-BbW" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="FeV-tl-0by"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="dIX-Vg-42x" secondAttribute="bottom" constant="20" id="ZqI-wD-1CX"/>
+                            <constraint firstAttribute="trailing" secondItem="oIJ-dt-BbW" secondAttribute="trailing" constant="20" symbolic="YES" id="iLP-QP-6aD"/>
+                            <constraint firstItem="oIJ-dt-BbW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="nAu-Gs-hGj"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="statusLabel" destination="8bC-Xf-vdC" id="2TU-cz-A5c"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

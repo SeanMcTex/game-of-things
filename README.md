@@ -196,16 +196,15 @@
 
 # [Fit] The Client
 
-^ The client is typically a mobile or desktop computer that interacts with the backend service. In our use case, we have two kinds of clients: that of the King, who gets alerts when he hasn't brutally killed someone recently, and that of the court, which get alerted when someone new ascends to the throne, and can warn the king when an assassination attempt in immanent. 
+^ The client is typically a mobile or desktop computer that interacts with the backend service. Since this is CocoaConf, we'll be considering how to write client for iOS. Our approach will vary depending on the comnmunication technology we're using. For BLE connections, CoreBluetooth will allow us to talk to the device directly. If we're connected over Wifi, we'll likely use REST calls, either to the device directly, or to the backend service. In addition, many services provide an SDK to make talking to their systems even easier.
 
-^ So, let's talk about the client. In our case, since this is CocoaConf, we'll be considering how to write client for iOS. Our approach will vary depending on the comnmunication technology we're using. For BLE connections, CoreBluetooth will allow us to talk to the device directly. If we're connected over Wifi, we'll likely use REST calls, either to the device directly, or to the backend service. In addition, many services provide an SDK to make talking to their systems even easier.
+^ In our use case, we have two kinds of clients: that of the King, who gets alerts when he hasn't brutally killed someone recently, and that of the court, which get alerted when someone new ascends to the throne, and can warn the king when an assassination attempt in immanent. 
 
 ----
 
 ![Fit](IoT architecture Diagram.png)
 
-^ So, here's the architecture diagram again. Note that this is not the only architecture possible; one can dispense with the Cloud Service component and have clients talk directly to the microcontrollers. The disadvantage, however, is that it becomes considerably harder to interact with your IoT devices if you're not close by or on the same network, so structuring things in this way generally provides the most benefit and flexibility.
-
+^ So, here's the architecture diagram again. Note that this is not the only architecture possible; one can dispense with the Cloud Service component and have clients talk directly to the microcontrollers, either over wifi or bluetooth. The disadvantage, however, is that it becomes considerably harder to interact with your IoT devices if you're not close by or on the same network, so structuring things in this way generally provides the most benefit and flexibility.
 
 ^ Any questions about how these pieces fit together?
 
@@ -328,4 +327,89 @@ void notifyAssassination() {
 }
 
 ```
+----
 
+#[Fit]Client App 
+#[Fit]for the Court
+
+
+^ The nice thing about using most of these IoT cloud services is that they've already written the code that's responsible for making the microcontroller communicate with the cloud service. We interact with it on the microcontroller using a library, and on the client by either using REST calls to the cloud service, or by using another libarry. So, let's now take a look at what that looks like on the client end. We'll use the library that Particle provides for iOS to make things as straightforward as possible. As we've mentioned previously, we'd need two apps for the use cases we're dealing with: one for the king, and one for the court. Let's start by looking at the court app. 
+
+----
+
+```ruby
+use_frameworks!
+
+target 'IronCourt' do
+	pod "Spark-SDK"
+end
+```
+
+^ The first thing we need to do is to get the library into our project. Particle uses Cocoapods to distribute their iOS library, so all we need to do is to add the appropriate pod to our Podfile and run pod update. Note that if we're using Swift, we need to include the use_frameworks! command as well.
+
+----
+
+^ In order to keep our architecture clean, we create a ParticleManager class that is responsible for interacting with the Particle ecosystem and reporting back to the rest of the app via a delegate which is assigned when we initialize the ParticleManager. We then call the loginToParticle method, which will establish the connection to the Particle Cloud service.
+
+```swift
+protocol ParticleManagerDelegate {
+    func didReceiveAssassinationAlert()
+    func didRecieveOccupantUpdate()
+}
+
+class ParticleManager {
+	...
+	let delegate : ParticleManagerDelegate
+    
+    init( delegate: ParticleManagerDelegate ) {
+        self.delegate = delegate
+        
+        self.loginToParticle()
+    }
+	...
+}
+
+```
+
+----
+
+^ Here we fetch our username and password and use the SparkCloud library to establish a connection. The loginWithUser function returns an error if there's a problem logging in. If we don't get an error back, then all is well, and we move on to locating the particular Photon device in our acccount.
+
+```swift
+    private func loginToParticle() {
+        let ( username, password ) = self.getUsernameAndPasswordFromPlist()
+        
+        SparkCloud.sharedInstance().loginWithUser(username, password: password) { (error:NSError!) -> Void in
+            if let error = error {
+                print("Wrong credentials or no internet connectivity, please try again. Error: " + 
+					error.localizedDescription )
+            } else {
+                print("Logged in")
+                self.findPhoton()
+            }
+        }
+    }
+    
+```
+
+----
+
+^ And finally, we get a list of Photons registered to our account and iterate through them to find the one named "iron-throne." We stash it in a property on our ParticleManager class, and we're all set up!
+
+```swift
+    private func findPhoton() {
+        SparkCloud.sharedInstance().getDevices { (sparkDevices:[AnyObject]!, error:NSError!) -> Void in
+            
+            guard let devices = sparkDevices as? [SparkDevice]
+                else {
+                    print( "Could not get list of devices." )
+                    return
+            }
+            
+            for device in devices where device.name == "iron-throne" {
+                self.ironThronePhoton = device
+                self.subscribeToEvents()
+            }
+        }
+    }
+```
