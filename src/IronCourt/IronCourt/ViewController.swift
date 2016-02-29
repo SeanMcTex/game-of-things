@@ -11,22 +11,31 @@ import UIKit
 class ViewController: UIViewController, ParticleManagerDelegate {
     
     var particleManager : ParticleManager!
-    @IBOutlet var statusLabel: UIView!
+    let dateFormatter = NSDateFormatter()
+    
+    @IBOutlet var statusLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.particleManager = ParticleManager( delegate: self )
-        
+
+        dateFormatter.dateStyle = .NoStyle
+        dateFormatter.timeStyle = .ShortStyle
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     @IBAction func didReceiveSendAlertTap(sender: AnyObject) {
         self.particleManager.sendAssassinationAlert()
+    }
+    
+    func didRecieveOccupantUpdate(occupantName: String) {
+        let dateString = dateFormatter.stringFromDate( NSDate() )
+        
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            let labelText = "\(dateString): \(occupantName)"
+            self.statusLabel.text = labelText
+        }
+        
     }
 }
 

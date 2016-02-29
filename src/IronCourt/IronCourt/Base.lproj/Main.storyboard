@@ -41,7 +41,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="statusLabel" destination="8bC-Xf-vdC" id="2TU-cz-A5c"/>
+                        <outlet property="statusLabel" destination="oIJ-dt-BbW" id="Jjd-qv-Rdx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

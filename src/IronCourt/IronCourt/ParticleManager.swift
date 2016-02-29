@@ -11,7 +11,7 @@ import Spark_SDK
 
 protocol ParticleManagerDelegate {
     func didReceiveAssassinationAlert()
-    func didRecieveOccupantUpdate()
+    func didRecieveOccupantUpdate( occupantName: String )
 }
 
 extension ParticleManagerDelegate {
@@ -19,7 +19,7 @@ extension ParticleManagerDelegate {
         // delegates can implement this if they wish to take action
     }
     
-    func didRecieveOccupantUpdate() {
+    func didRecieveOccupantUpdate( occupantName: String ) {
         // delegates can implement this if they wish to take action
     }
 }
@@ -85,7 +85,10 @@ class ParticleManager {
     }
 
     private func eventHandler( event: SparkEvent!, error: NSError! ) {
-        print("Got event: " + event.data + "; " + event.event)
+        print("Got event: " + event.event + "; " + event.data)
+        if event.event == "throneStatus" {
+            self.delegate.didRecieveOccupantUpdate( event.data )
+        }
     }
     
     deinit {

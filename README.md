@@ -335,6 +335,12 @@ void notifyAssassination() {
 
 ^ The nice thing about using most of these IoT cloud services is that they've already written the code that's responsible for making the microcontroller communicate with the cloud service. We interact with it on the microcontroller using a library, and on the client by either using REST calls to the cloud service, or by using another libarry. So, let's now take a look at what that looks like on the client end. We'll use the library that Particle provides for iOS to make things as straightforward as possible. As we've mentioned previously, we'd need two apps for the use cases we're dealing with: one for the king, and one for the court. Let's start by looking at the court app. 
 
+---
+
+# Client Screenshot
+
+^ Our super-fancy app for the court has two important elements: a status indicator in the middle of the screen that shows who has most recently taken the throne and at what time. It also has a button at the bottom that allows the member of the court to send an alert to the king to warn him of an immanent assassination. You know, if he wants to. So, let's see how we get this working:
+
 ----
 
 ```ruby
@@ -345,7 +351,7 @@ target 'IronCourt' do
 end
 ```
 
-^ The first thing we need to do is to get the library into our project. Particle uses Cocoapods to distribute their iOS library, so all we need to do is to add the appropriate pod to our Podfile and run pod update. Note that if we're using Swift, we need to include the use_frameworks! command as well.
+^ The first thing we need to do is to get the library into our project. Particle uses Cocoapods to distribute their iOS library, so all we need to do is to add the appropriate pod to our Podfile and run pod update. Note that if we're using Swift, we need to include the use_frameworks! command as well. ("Why," I hear you wondering, "is their SDK called Spark?" Well, that was the name of the company when they started. But somewhere along the way, they realized there were too many things out there in the world already named Spark, and they were tired of namespace conflicts, so they changed their name to Particle. They're still in the process of moving everything over to the new name, so once in a while, you'll still see a reference to "Spark".)
 
 ----
 
@@ -413,3 +419,36 @@ class ParticleManager {
         }
     }
 ```
+---
+
+# Client Screenshot
+
+^ So now that we've laid all of the groundwork, let's make that little "Send Assassination Alert" button down at the bottom of our client screen actually do something.
+
+--- 
+
+```
+    final func sendAssassinationAlert() {
+        ironThronePhoton?.callFunction("notify",
+            withArguments: ["assassination"],
+            completion: nil );
+    }
+```
+
+^ You'll recall that in our microcontroller code, we created a function called "notify" and checked its parameter to see if it was "assassination". Here's the other end of that. Using the Photon client SDK, we call that "notify" function, and pass it a single argument, the string "assissanation". We also have the option to provide a completion block, but don't do so here, making it a fire-and-forget operation.
+
+---
+
+
+#[Fit]Client App 
+#[Fit]for the King
+
+---
+
+
+
+## [Fit]https://github.com/SeanMcTex/game-of-things
+
+sean.mcmains@mutualmobile.com
+@SeanMcTex
+http://www.mcmains.net
