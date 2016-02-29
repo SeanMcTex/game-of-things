@@ -38,19 +38,13 @@
 
 ^ The Connected Iron Throne
 
-^ Why would anyone want a connected throne? Well, this one tracks your ruling activity. If it notices you haven't gotten up for an hour, it pushes a notification to The Iron Phone (see what I did there?) to remind you to stand up and behead someone. 
+^ Why would anyone want a connected throne? Well, this one tracks your ruling activity. If it notices you haven't gotten up for an hour, triggers a vibration motor in the seat to let you know that it's time to stand up and get a little exercise, probably by beheading someone.
 
 ----
 
-![Fit](ironphone-2-620x620.jpg)
+![Fit](ironphone-2-620x620.jpg) 
 
-^ Update this to show a push notification on the lock screen.
-
-----
-
-![Fit](91OkqM3KPlL2.jpg)
-
-^ It also has a vibration motor that anyone in your court can trigger to let you know that you're in danger of assassination (king looking back, "Huh?!" balloon). Finally, it has a patented Hindquarter Identification System that allows it to recognize when a new person sits in the throne and notifies the court of the latest regicide. (Some sort of Butt ID graphic.)
+^ Anyone in your court can use an app on their Iron Phone (see what I did there?) to trigger a different vibration pattern to let you know that you're in danger of assassination (king looking back, "Huh?!" balloon). 
 
 
 ----
@@ -85,14 +79,6 @@
 #[Fit] Vibration Motor
 
 ^ We also need a vibration motor, which we'll attach to the throne's frame as well. 
-
-----
-
-# [Fit] Hindquarter ID System
-
-^ And finally, the Hindquarter Identification System has a serial connection that transmits a HUID (Hindquarter Unique Identifier) whenever someone assumes the throne. I don't have a photo of this, because I made it up.
-
-
 
 ----
 
@@ -177,7 +163,7 @@
 
 # [Fit]Amazon Web Services IOT
 
-^ Has common functionality, plus "shadow" devices that allow you to write updates to devices that will be applied when they next connect. Rules engine provides some capabilities for querying data SQL-style, and acting automatically on it. Can drive DB export, alerts, etc. Works nicely with other tools in Amazon's cloud suite. Has SDKs for C, Node, Arduino, and Mobile. Can put permission restrictions on particular devices. Fair bit of work to get things up and running.
+^ Has common functionality, plus "shadow" devices that allow you to write updates to devices that will be applied when they next connect. Rules engine provides some capabilities for querying incoming data SQL-style, and acting automatically on it. Can drive DB export, alerts, etc. Works nicely with other tools in Amazon's cloud suite. Has SDKs for C, Node, Arduino, and Mobile. Can put permission restrictions on particular devices. Fair bit of work to get things up and running.
 
 ----
 ![](sir-not-appearing.png)
@@ -337,9 +323,9 @@ void notifyAssassination() {
 
 ---
 
-# Client Screenshot
+![Fit](ironphone-2-620x620.jpg) 
 
-^ Our super-fancy app for the court has two important elements: a status indicator in the middle of the screen that shows who has most recently taken the throne and at what time. It also has a button at the bottom that allows the member of the court to send an alert to the king to warn him of an immanent assassination. You know, if he wants to. So, let's see how we get this working:
+^ Our super-fancy app for the court has two important elements: a status indicator in the middle of the screen that shows when someone most recently took the throne, and a button at the bottom that allows the member of the court to send an alert to the king or queen to warn of an immanent assassination. You know, if he wants to. So, let's see how we get this working:
 
 ----
 
@@ -421,7 +407,7 @@ class ParticleManager {
 ```
 ---
 
-# Client Screenshot
+![Fit](ironphone-2-620x620.jpg) 
 
 ^ So now that we've laid all of the groundwork, let's make that little "Send Assassination Alert" button down at the bottom of our client screen actually do something.
 
@@ -440,10 +426,6 @@ class ParticleManager {
 ---
 
 
-#[Fit]Client App 
-#[Fit]for the King
-
----
 
 
 
