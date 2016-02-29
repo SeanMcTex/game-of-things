@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10112" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10083"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,27 +17,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone-paper" translatesAutoresizingMaskIntoConstraints="NO" id="XwC-km-bv8">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIX-Vg-42x">
-                                <rect key="frame" x="215" y="550" width="170" height="30"/>
-                                <state key="normal" title="Send Assassination Alert"/>
+                                <rect key="frame" x="156.5" y="539" width="287" height="41"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                <state key="normal" title="Send Assassination Alert">
+                                    <color key="titleColor" red="1" green="0.14244898759999999" blue="0.067837994139999996" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="didReceiveSendAlertTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fU5-Ob-rMu"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status Update" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oIJ-dt-BbW">
-                                <rect key="frame" x="20" y="284" width="560" height="33"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                <color key="textColor" red="1" green="0.14244898759999999" blue="0.067837994139999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="20" y="28" width="560" height="43"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                                <color key="textColor" red="0.99989169836044312" green="1" blue="0.99988096952438354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="dIX-Vg-42x" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="02q-xD-U9t"/>
-                            <constraint firstItem="oIJ-dt-BbW" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="FeV-tl-0by"/>
+                            <constraint firstItem="XwC-km-bv8" firstAttribute="left" secondItem="8bC-Xf-vdC" secondAttribute="left" id="9KK-6c-FGq"/>
+                            <constraint firstItem="XwC-km-bv8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="C82-oI-mLy"/>
+                            <constraint firstItem="oIJ-dt-BbW" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="JZa-1t-XhY"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="dIX-Vg-42x" secondAttribute="bottom" constant="20" id="ZqI-wD-1CX"/>
+                            <constraint firstAttribute="right" secondItem="XwC-km-bv8" secondAttribute="right" id="fPJ-Aj-8T8"/>
                             <constraint firstAttribute="trailing" secondItem="oIJ-dt-BbW" secondAttribute="trailing" constant="20" symbolic="YES" id="iLP-QP-6aD"/>
                             <constraint firstItem="oIJ-dt-BbW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="nAu-Gs-hGj"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="XwC-km-bv8" secondAttribute="bottom" id="pba-q8-fMb"/>
                         </constraints>
                     </view>
                     <connections>
@@ -48,4 +58,7 @@
             </objects>
         </scene>
     </scenes>
+    <resources>
+        <image name="phone-paper" width="640" height="1136"/>
+    </resources>
 </document>
