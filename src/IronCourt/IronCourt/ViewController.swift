@@ -28,14 +28,14 @@ class ViewController: UIViewController, ParticleManagerDelegate {
         self.particleManager.sendAssassinationAlert()
     }
     
-    func didRecieveOccupantUpdate(occupantName: String) {
+    final func didRecieveOccupantUpdate(occupantName: String) {
         let dateString = dateFormatter.stringFromDate( NSDate() )
         
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             let labelText = "\(dateString): \(occupantName)"
             self.statusLabel.text = labelText
         }
-        
     }
+    
 }
 

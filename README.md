@@ -62,14 +62,20 @@
 
 ^ Your IoT device isn't much good without a way to interact with the world. In the same way that our brains interact with the world by means of inputs and outputs, your IoT device uses sensors to find out what's going on around it, and actuators to make something happen.
 
-^ Fancy word: an actuator is simply a motor that moves things or causes an action to take place under electronic control. 
+^ Fancy word: an actuator is simply a motor or other device that moves things or causes an action to take place under electronic control. 
 
 ----
+
+![Fit](sensors.jpg)
+
+^ Microcontrollers generally use commodity electronic sensors and actuators. There are a ton of these out there in the world. If you want to start experimenting with them, you can buy starter collections that give you lots of fun things to play with. Some common sensors detect light, temperature, motion, proximity, acceleration, rotation, and orientation. Projects of this sort can also have a variety of actuators, including motors, speakers, lights, relays, etc.
+
+---
 
 ![Inline](sensorforceresistor.jpg)
 #[Fit]Pressure Sensor
 
-^ We have to be able to detect when the throne is occupied, so we'll install a pressure sensor under the seat of the throne. It looks like this.
+^ In our case, we have to be able to detect when the throne is occupied, so we'll install a pressure sensor under the seat of the throne. It looks like this.
 
 
 ----
@@ -255,7 +261,6 @@ void loop()
 ^ The loop function is essentially your runtime loop. It gets called over and over until your controller gets reset. In our case, all we need to do is to read the value from the pressure sensor pin and assign it to our variable. Since we've already linked that variable to the REST endpoint in our setup, we can now query the value of our pressure sensor through the REST API.
 
 
-
 ----
 
 ![Inline](vibration-motor.jpg)
@@ -314,6 +319,35 @@ void notifyAssassination() {
 
 ```
 ----
+
+---
+
+```
+int standInterval = 1000 * 60 * 60;
+int lastStandTime;
+
+void loop()
+{
+    pressureReading = analogRead( pressureSensorPin );
+    
+    bool isThroneOccupied = pressureReading > pressureThreshold;
+	...    
+    if ( isThroneOccupied ) {
+        if ( lastStandTime + standInterval < millis() ) {
+            notifyTimeToStand();
+        }
+    } else {
+        lastStandTime = millis();
+    }
+    
+    delay( 500 );
+}
+
+```
+
+^ Now, I mentioned a moment ago that most of the business logic is generally located elsewhere. However, when we want to remind the king to stand up periodically, the microcontroller already has all of the information it needs, so we can write the rule right here. The nice thing about doing it this way is that, even if we lose connectivity to the Internet for some reason, the stand alert will still work.
+
+---
 
 #[Fit]Client App 
 #[Fit]for the Court
@@ -386,7 +420,7 @@ class ParticleManager {
 
 ----
 
-^ And finally, we get a list of Photons registered to our account and iterate through them to find the one named "iron-throne." We stash it in a property on our ParticleManager class, and we're all set up!
+^ And finally, we get a list of Photons registered to our account and iterate through them to find the one named "iron-throne." We stash it in a property on our ParticleManager class, and we're all set up! (Don't worry about that `subscribeToEvents()` call; we'll come back to that in a moment.)
 
 ```swift
     private func findPhoton() {
@@ -425,9 +459,43 @@ class ParticleManager {
 
 ---
 
+```
+    private func subscribeToEvents() {
+        self.subscriberId = SparkCloud.sharedInstance().
+			subscribeToMyDevicesEventsWithPrefix("throneStatus", 
+			handler: eventHandler )
+    }
+	
+    ...
+	
+    private func eventHandler( event: SparkEvent!, error: NSError! ) {
+        print("Got event: " + event.event + "; " + event.data)
+        if event.event == "throneStatus" {
+            self.delegate.didRecieveOccupantUpdate( event.data )
+        }
+    }
+
+```
+
+^ So, with our button working, we now want to watch for updates on whether the throne is occupied, and when that status changes, update our UILabel to tell the phone's owner about it. We had previously set up our microcontroller to publish events whenever the pressure switch's status changed, so now we use the iOS SDK's library to subscribe to those events. (Remember that `subscribeToEvents()` call from before? This is where it went.) 
 
 
+---
 
+```
+    final func didRecieveOccupantUpdate(occupantName: String) {
+        let dateString = dateFormatter.stringFromDate( NSDate() )
+        
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            let labelText = "\(dateString): \(occupantName)"
+            self.statusLabel.text = labelText
+        }
+    }
+```
+
+^ And, of course, here's the code in the view controller (which is the Manager's delegate.) It'll all standard iOS stuff here.
+
+---
 
 ## [Fit]https://github.com/SeanMcTex/game-of-things
 
