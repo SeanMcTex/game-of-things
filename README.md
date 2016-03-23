@@ -118,7 +118,7 @@
 
 ^ * Also need wireless:
 
-^ * Bluetooth: very low power, but requires a nearby host
+^ * Bluetooth: very low power, but requires a nearby host. (BLE 4.2 changes this with 6LoWPAN.)
 
 ^ * Wifi: Can connect directly to the internet if there's an access point
 
@@ -158,13 +158,15 @@
 
 ^ * Can run for months on a single coin cell battery.
 
+^ * Tell about Dorothy http://observer.com/2014/10/dorothy-wearable-device-lets-you-escape-blind-dates-by-clicking-your-heels/
+
 ----
 
 ![Inline](Raspberry_Pi_2_Model_B_v1.1_top_new_\(bg_cut_out\).jpg)
 
 ## [Fit]Raspberry Pi
  
-^ * First introduced in February 2012, Raspberry Pi 2 in 2014.
+^ * First introduced in February 2012, Raspberry Pi 2 in 2014, Pi 3 in 2016.
 
 ^ * Complete ARM computer on a board for $35. Hook up keyboard and monitor.
 
@@ -172,7 +174,7 @@
 
 ^ * Hugely popular, has decent processing capabilities, I/O.  
 
-^ * Requires $10 USB wifi dongle to get it on a network. 
+^ * Requires $10 USB wifi dongle to get it on a network, or onboard with Pi 3.
 
 ^ * Python by default, but supports a wide variety of languages.
  
@@ -355,7 +357,11 @@
 
 ----
 
-#[Fit] TODO: Wiring Diagram
+![Fit](Pressure-diagram.png)
+
+^ * Here's how we wire up the pressure sensor. One leg to power, one to an anolog input.
+
+^ * Use a pulldown resistor to make sure our wiring isn't acting as an antenna and picking up random values.
 
 ----
 
@@ -430,7 +436,9 @@ void loop()
 
 ----
 
-#[Fit]TODO: Wiring Diagram
+![Fit](Motor-diagram.png)
+
+^ * Electricity makes a circuit, so we connect it to power, but until we let the electrons back in D7, the motor doesn't run.
 
 ---
 
@@ -521,7 +529,7 @@ void loop()
 
 ^ * For standing reminders, the microcontroller already has all of the information it needs.
 
-^ * Even if we lose connectivity, the stand alert will still work.
+^ * Even if we lose connectivity, the stand alert will still work. Handling it locally also reduces data usage.
 
 ---
 
@@ -699,11 +707,11 @@ class ParticleManager {
 ---
 
 ```
-    final func didRecieveOccupantUpdate(occupantName: String) {
+    final func didRecieveOccupantUpdate(status: String) {
         let dateString = dateFormatter.stringFromDate( NSDate() )
         
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            let labelText = "\(dateString): \(occupantName)"
+            let labelText = "\(dateString): \(status)"
             self.statusLabel.text = labelText
         }
     }
