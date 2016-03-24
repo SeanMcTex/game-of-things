@@ -158,8 +158,6 @@
 
 ^ * Can run for months on a single coin cell battery.
 
-^ * Tell about Dorothy http://observer.com/2014/10/dorothy-wearable-device-lets-you-escape-blind-dates-by-clicking-your-heels/
-
 ----
 
 ![Inline](Raspberry_Pi_2_Model_B_v1.1_top_new_\(bg_cut_out\).jpg)
@@ -733,6 +731,37 @@ class ParticleManager {
 
 ---
 
+#[Fit]Ideas
+
+---
+
+![](Dorothy_1.jpg)
+
+^ * Tell about Dorothy http://observer.com/2014/10/dorothy-wearable-device-lets-you-escape-blind-dates-by-clicking-your-heels/
+
+^ * Ruby device is based on Light Blue Bean
+
+---
+
+![](gthrive.jpg)
+
+^ * gThrive wireless soil sensors. Establish mesh network, monitor conditions in ways previously impossible.
+
+---
+
+![Fit](bitlock.png)
+
+^ * Connected lock allows bike sharing by giving only certain people access, sharing location.
+
+---
+
+![Fit](ocupado.PNG)
+
+^ * Bathroom stall occupancy sensor we've developing for our own needs
+
+---
+
+
 ![Fit](91OkqM3KPlL2.jpg)
 
 #[Fit]Q&A
@@ -744,3 +773,5 @@ class ParticleManager {
 sean.mcmains@mutualmobile.com
 @SeanMcTex
 http://www.mcmains.net
+
+^ * Go forth and make something awesome.
