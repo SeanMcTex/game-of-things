@@ -64,6 +64,9 @@
 
 ----
 
+![Fit](IoT Architecture Diagram-sensors.png)
+
+---
 
 ![Fit](91OkqM3KPlL2.jpg)
 
@@ -71,7 +74,7 @@
 
 ^ * Device must interact w/world
 
-^ * Brain : Senses/Body :: Microcontroller : Sensors/Actuators
+^ * SAT analogy: In a human, the Brain is to the senses and the body as, in an IoT device, the Microcontroller is to sensors and actuators.
 
 ^ * Fancy word: Actuator: a device, such as a motor or light, that affects the world under electronic control. 
 
@@ -107,6 +110,10 @@
 
 ----
 
+![Fit](IoT Architecture Diagram-microcontroller.png)
+
+---
+
 ![Fit](91OkqM3KPlL2.jpg)
 
 # [Fit] A Microcontroller
@@ -134,11 +141,11 @@
 
 ##[Fit] Arduino
 
-^ * First arduino introduced in 2005, rapidly became a hobbyist favorite. 
+^ * First Arduino introduced in 2005, rapidly became a hobbyist favorite. 
 
 ^ * Open-source hardware & software. 
 
-^ * Myriad hardware options available, some starting at about $8. 
+^ * Myriad hardware options available, some starting at about $2. 
 
 ^ * Comes with its own Java-based IDE. 
 
@@ -175,6 +182,8 @@
 ^ * Requires $10 USB wifi dongle to get it on a network, or onboard with Pi 3.
 
 ^ * Python by default, but supports a wide variety of languages.
+
+^ * Bare metal toolchain that makes timing more reliable
  
 ----
  
@@ -186,13 +195,13 @@
 
 ^ * The Photon is $19 w/Wifi
 
-^ * $39 Electron has cell radio & SIM card for data.
+^ * $49 Electron has cell radio & SIM card for data.
 
 ^ * Programmed like Arduino
 
 ^ * Can be programmed over the air using Particle's web-based IDE. 
 
-^ * Designed to work with the free Particle.io service.
+^ * Designed to work with the Particle.io service. (Cost of using the service is built into the device.)
 
 ----
 
@@ -208,9 +217,13 @@
 
 ----
 
+![Fit](IoT Architecture Diagram-cloud.png)
+
+---
+
 ![Fit](91OkqM3KPlL2.jpg)
 
-# [Fit] A Backend Service
+# [Fit] A Cloud Backend Service
 
 ^ * A known destination for your device to send information to. 
 
@@ -236,7 +249,7 @@
  
 ![Fit](microsoft-azure-logo.jpg)
 
-^ * Micosoft Azure IoT: http://www.microsoft.com/en-us/server-cloud/internet-of-things/azure-iot-suite.aspx. 
+^ * Microsoft Azure IoT: http://www.microsoft.com/en-us/server-cloud/internet-of-things/azure-iot-suite.aspx. 
 
 ^ * Provides Monitoring, Asset Management, and Analytics/Predictive Maintenance
 
@@ -261,9 +274,9 @@
 
 ^ * Works well with other tools in Amazon's cloud suite. 
 
-^ * SDKs for C, Node, Arduino, and Mobile. 
-
 ^ * Permission restrictions on particular devices. 
+
+^ * SDKs for C, Node, Arduino, and Mobile. 
 
 ----
 ![](sir-not-appearing.png)
@@ -285,6 +298,10 @@
 ^ * Point out that every logo is blue. Go figure.
 
 ----
+
+![Fit](IoT Architecture Diagram-client.png)
+
+---
 
 ![Fit](91OkqM3KPlL2.jpg)
 
@@ -357,7 +374,7 @@
 
 ![Fit](Pressure-diagram.png)
 
-^ * Here's how we wire up the pressure sensor. One leg to power, one to an anolog input.
+^ * Here's how we wire up the pressure sensor. One leg to power, one to an analog input.
 
 ^ * Use a pulldown resistor to make sure our wiring isn't acting as an antenna and picking up random values.
 
@@ -391,6 +408,8 @@ void setup()
 ^ * Setup gets called once when the system powers up or is reset. 
 
 ^ * We configure input pin for pressure sensor & expose a variable to the REST API.
+
+^ * Point out that A0 corresponds to the pin we wired to. (Show previous slide again.)
 
 ----
 
@@ -428,7 +447,7 @@ void loop()
 
 ^ * Some motors can be driven by directly from a microcontroller. 
 
-^ * Bigger ones require a transistor or relay and a seperate power source. 
+^ * Bigger ones require a transistor or relay and a separate power source. 
 
 ^ * We're choosing one that can be connected directly to the controller.
 
@@ -443,7 +462,7 @@ void loop()
 
 ^ * Here's setup code for the motor. 
 
-^ * We set the mode for ditial pin 7 to OUTPUT. 
+^ * We set the mode for digital pin 7 to OUTPUT. (Refer to previous slide.)
 
 ^ * digitalWrite allows us to turn the motor on and off. We set the pin LOW to make sure it's off when we start.
 
@@ -667,9 +686,9 @@ class ParticleManager {
 
 ^ * Here's the other end of that. 
 
-^ * We call that "notify" function, and pass it a single argument, the string "assissanation". 
+^ * We call that "notify" function, and pass it a single argument, the string "assassination". 
 
-^ * We don't need completion black, it's fire-and-forget.
+^ * We don't need completion block, it's fire-and-forget.
 
 ---
 
